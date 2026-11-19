@@ -1,0 +1,25 @@
+{% extends 'accounts/base.html' %}
+{% block title %}Log in{% endblock %}
+{% block auth %}
+<div class='auth-hero'>
+  <div class='auth-hero-inner'>
+    {% if school.logo %}
+    <img class='auth-logo' src='{{ school.logo.url }}' alt=''>
+    {% else %}
+    <span class='brand-mark big'><svg class='ico'><use href='#i-book'/></svg></span>
+    {% endif %}
+    <h1>{{ school.name }}</h1>
+    <p>{% if school.slogan %}{{ school.slogan }}{% else %}Grades, attendance and results for the direction, teachers, students and parents.{% endif %}</p>
+  </div>
+</div>
+<div class='auth-panel'>
+  <form method='post' class='auth-card'>
+    {% csrf_token %}
+    <h2>Log in</h2>
+    <p class='muted'>Use the username and password you received from the school.</p>
+    {% if form.errors %}<p class='msg error'>The username or password is wrong. Try again.</p>{% endif %}
+    {{ form.as_p }}
+    <button type='submit' class='block'>Log in</button>
+  </form>
+</div>
+{% endblock %}

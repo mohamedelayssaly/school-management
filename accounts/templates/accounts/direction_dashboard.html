@@ -1,0 +1,58 @@
+{% extends 'accounts/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<section class='hero'>
+  <h1>Welcome back, {{ user.first_name|default:user.username }}</h1>
+  <p>Here is a quick view of the school. Use the shortcuts below to manage people, classes and results.</p>
+</section>
+
+<div class='stats'>
+  <div class='stat g-indigo' style='--i:0'>
+    <svg class='ico'><use href='#i-users'/></svg>
+    <strong class='stat-number' data-count='{{ students_count }}'>{{ students_count }}</strong>
+    <span class='stat-label'>Students</span>
+  </div>
+  <div class='stat g-teal' style='--i:1'>
+    <svg class='ico'><use href='#i-brief'/></svg>
+    <strong class='stat-number' data-count='{{ employees_count }}'>{{ employees_count }}</strong>
+    <span class='stat-label'>Employees</span>
+  </div>
+  <div class='stat g-amber' style='--i:2'>
+    <svg class='ico'><use href='#i-book'/></svg>
+    <strong class='stat-number' data-count='{{ classes_count }}'>{{ classes_count }}</strong>
+    <span class='stat-label'>Classes</span>
+  </div>
+  <div class='stat g-rose' style='--i:3'>
+    <svg class='ico'><use href='#i-chart'/></svg>
+    <strong class='stat-number' data-count='{{ exams_count }}'>{{ exams_count }}</strong>
+    <span class='stat-label'>Exams</span>
+  </div>
+</div>
+
+<div class='actions'>
+  <a class='action' href='{% url 'student_list' %}'>
+    <span class='ico-box'><svg class='ico'><use href='#i-users'/></svg></span>
+    <div><strong>Students</strong><span>Add, search and edit students</span></div>
+  </a>
+  <a class='action' href='{% url 'employee_list' %}'>
+    <span class='ico-box'><svg class='ico'><use href='#i-brief'/></svg></span>
+    <div><strong>Employees</strong><span>Teachers and staff members</span></div>
+  </a>
+  <a class='action' href='{% url 'class_list' %}'>
+    <span class='ico-box'><svg class='ico'><use href='#i-book'/></svg></span>
+    <div><strong>Classes</strong><span>Create and edit school classes</span></div>
+  </a>
+  <a class='action' href='{% url 'class_results' %}'>
+    <span class='ico-box'><svg class='ico'><use href='#i-chart'/></svg></span>
+    <div><strong>Class results</strong><span>Rankings and Excel export</span></div>
+  </a>
+  <a class='action' href='{% url 'parent_list' %}'>
+    <span class='ico-box'><svg class='ico'><use href='#i-users'/></svg></span>
+    <div><strong>Parents</strong><span>Add parents and link them to their children</span></div>
+  </a>
+  <a class='action' href='{% url 'admin:index' %}'>
+    <span class='ico-box'><svg class='ico'><use href='#i-home'/></svg></span>
+    <div><strong>Admin panel</strong><span>Advanced data, parents and enrollments</span></div>
+  </a>
+</div>
+{% endblock %}

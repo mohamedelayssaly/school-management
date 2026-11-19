@@ -1,0 +1,12 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+<h2>New exam: {{ assignment.subject.name }} - {{ assignment.school_class.name }}</h2>
+<form method='post' class='panel narrow'>
+  {% csrf_token %}
+  {{ form.as_p }}
+  <div class='form-actions'>
+    <button type='submit'>Create exam</button>
+    <a class='btn btn-ghost' href='{% url 'assignment_detail' assignment.pk %}'>Cancel</a>
+  </div>
+</form>
+{% endblock %}

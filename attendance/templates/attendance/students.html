@@ -1,0 +1,30 @@
+{% extends 'accounts/base.html' %}
+{% block title %}Students of {{ school_class.name }}{% endblock %}
+{% block content %}
+<h2>Students of class {{ school_class.name }}</h2>
+<p class='muted'>{{ school_class.level.name }} | {{ school_class.academic_year.name }} | Your subjects: {% for a in assignments %}{{ a.subject.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+
+<div class='form-actions'>
+  <a class='btn' href='{% url 'attendance_sheet' school_class.pk %}'>Take attendance</a>
+  {% for a in assignments %}
+  <a class='btn btn-ghost' href='{% url 'assignment_detail' a.pk %}'>{{ a.subject.name }}: exams and grades</a>
+  {% endfor %}
+</div>
+
+<table>
+  <tr><th>Number</th><th>Student</th><th>Absences</th><th>Parents</th></tr>
+  {% for row in rows %}
+  <tr>
+    <td>{{ row.student.student_number }}</td>
+    <td>{{ row.student.user.get_full_name|default:row.student.user.username }}</td>
+    <td><span class='badge {% if row.absences %}absent{% else %}on{% endif %}'>{{ row.absences }}</span></td>
+    <td>
+      {% for p in row.parents %}{{ p.user.get_full_name|default:p.user.username }}{% if p.phone %} ({{ p.phone }}){% endif %}{% if not forloop.last %}, {% endif %}{% empty %}<span class='muted'>Not linked</span>{% endfor %}
+    </td>
+  </tr>
+  {% empty %}
+  <tr><td colspan='4' class='muted'>No students are enrolled in this class yet.</td></tr>
+  {% endfor %}
+</table>
+<p><a class='btn btn-ghost' href='{% url 'teacher_dashboard' %}'>Back to my classes</a></p>
+{% endblock %}

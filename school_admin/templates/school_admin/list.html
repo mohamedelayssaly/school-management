@@ -1,0 +1,31 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+<h2>{{ title }}</h2>
+<form method='get'>
+  <input type='text' name='q' value='{{ q }}' placeholder='Search'>
+  <button type='submit'>Search</button>
+  <a class='btn' href='{% url create_url %}'>Add new</a>
+</form>
+<table>
+  <tr>{% for h in headers %}<th>{{ h }}</th>{% endfor %}<th></th></tr>
+  {% for obj, cells in rows %}
+  <tr>
+    {% for c in cells %}<td>{{ c }}</td>{% endfor %}
+    <td>
+      <a class='btn btn-ghost' href='{% url edit_url obj.pk %}'>Edit</a>
+      {% if extra_url %}<a class='btn btn-ghost' href='{% url extra_url obj.pk %}'>{{ extra_label }}</a>{% endif %}
+    </td>
+  </tr>
+  {% empty %}
+  <tr><td colspan='{{ headers|length|add:1 }}'>Nothing found.</td></tr>
+  {% endfor %}
+</table>
+{% if is_paginated %}
+<p>
+  {% if page_obj.has_previous %}<a href='?q={{ q }}&page={{ page_obj.previous_page_number }}'>Previous</a>{% endif %}
+  Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+  {% if page_obj.has_next %}<a href='?q={{ q }}&page={{ page_obj.next_page_number }}'>Next</a>{% endif %}
+</p>
+{% endif %}
+<p><a class='btn btn-ghost' href='{% url 'direction_dashboard' %}'>Back to dashboard</a></p>
+{% endblock %}

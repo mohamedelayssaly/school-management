@@ -1,0 +1,23 @@
+{% extends 'accounts/base.html' %}
+{% block title %}My classes{% endblock %}
+{% block content %}
+<h2>My classes</h2>
+<div class='cards-grid'>
+  {% for a in assignments %}
+  <div class='class-card'>
+    <div class='class-card-top {% cycle 'g-indigo' 'g-teal' 'g-amber' 'g-rose' %}'></div>
+    <div class='class-card-body'>
+      <h4>{{ a.subject.name }}</h4>
+      <p class='muted'>Class {{ a.school_class.name }}</p>
+      <div class='class-card-actions'>
+        <a class='btn' href='{% url 'assignment_detail' a.pk %}'>Exams and grades</a>
+        <a class='btn btn-ghost' href='{% url 'attendance_sheet' a.school_class.pk %}'>Attendance</a>
+        <a class='btn btn-ghost' href='{% url 'class_students' a.school_class.pk %}'>Students</a>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class='panel'><p class='muted'>No classes are assigned to you yet. Ask the direction to add a teaching assignment.</p></div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+<h2>{{ title }}</h2>
+<form method='post' class='panel narrow'>
+  {% csrf_token %}
+  {{ form.as_p }}
+  <div class='form-actions'>
+    <button type='submit'>Save</button>
+    <a class='btn btn-ghost' href='{{ back_url }}'>Cancel</a>
+  </div>
+</form>
+{% endblock %}

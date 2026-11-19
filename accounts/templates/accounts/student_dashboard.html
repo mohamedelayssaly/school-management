@@ -1,0 +1,10 @@
+{% extends 'accounts/base.html' %}
+{% block title %}My results{% endblock %}
+{% block content %}
+<h2>My results and attendance</h2>
+{% if overview %}
+{% include 'accounts/_student_overview.html' with overview=overview show_pdf=True %}
+{% else %}
+<div class='panel'><p class='muted'>No student record is linked to your account yet. Ask the direction to link it.</p></div>
+{% endif %}
+{% endblock %}

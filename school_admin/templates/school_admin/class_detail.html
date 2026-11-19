@@ -1,0 +1,64 @@
+{% extends 'accounts/base.html' %}
+{% block title %}Class {{ school_class.name }}{% endblock %}
+{% block content %}
+<h2>Class {{ school_class.name }}</h2>
+<p class='muted'>{{ school_class.level.name }} | {{ school_class.academic_year.name }}</p>
+
+<h3>Teachers</h3>
+<table>
+  <tr><th>Subject</th><th>Teacher</th><th></th></tr>
+  {% for a in assignments %}
+  <tr>
+    <td>{{ a.subject.name }}</td>
+    <td>{{ a.teacher.user.get_full_name|default:a.teacher.user.username }}</td>
+    <td>
+      <form method='post' action='{% url 'assignment_remove' a.pk %}' onsubmit='return confirm(&quot;Remove this teacher from the subject?&quot;)'>
+        {% csrf_token %}
+        <button type='submit' class='btn-ghost'>Remove</button>
+      </form>
+    </td>
+  </tr>
+  {% empty %}
+  <tr><td colspan='3' class='muted'>No teachers are assigned to this class yet.</td></tr>
+  {% endfor %}
+</table>
+<form method='post' class='panel narrow'>
+  {% csrf_token %}
+  <input type='hidden' name='action' value='assign'>
+  <h4>Assign a teacher to a subject</h4>
+  {{ assign_form.as_p }}
+  <button type='submit'>Assign teacher</button>
+</form>
+
+<h3>Students ({{ enrollments|length }})</h3>
+<table>
+  <tr><th>Number</th><th>Student</th><th></th></tr>
+  {% for e in enrollments %}
+  <tr>
+    <td>{{ e.student.student_number }}</td>
+    <td>{{ e.student.user.get_full_name|default:e.student.user.username }}</td>
+    <td>
+      <form method='post' action='{% url 'enrollment_remove' e.pk %}' onsubmit='return confirm(&quot;Remove this student from the class?&quot;)'>
+        {% csrf_token %}
+        <button type='submit' class='btn-ghost'>Remove</button>
+      </form>
+    </td>
+  </tr>
+  {% empty %}
+  <tr><td colspan='3' class='muted'>No students are in this class yet.</td></tr>
+  {% endfor %}
+</table>
+<form method='post' class='panel narrow'>
+  {% csrf_token %}
+  <input type='hidden' name='action' value='enroll'>
+  <h4>Add students to this class</h4>
+  {% if enroll_form.fields.students.queryset %}
+  {{ enroll_form.as_p }}
+  <button type='submit'>Add selected students</button>
+  {% else %}
+  <p class='muted'>All students are already in a class for this academic year.</p>
+  {% endif %}
+</form>
+
+<p><a class='btn btn-ghost' href='{% url 'class_list' %}'>Back to classes</a></p>
+{% endblock %}

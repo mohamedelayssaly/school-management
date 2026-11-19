@@ -1,0 +1,12 @@
+{% extends 'accounts/base.html' %}
+{% block title %}My children{% endblock %}
+{% block content %}
+<h2>My children</h2>
+{% for o in overviews %}
+<section class='child'>
+  {% include 'accounts/_student_overview.html' with overview=o %}
+</section>
+{% empty %}
+<div class='panel'><p class='muted'>No children are linked to your account yet. Ask the direction.</p></div>
+{% endfor %}
+{% endblock %}

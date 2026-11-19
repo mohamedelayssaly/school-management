@@ -1,0 +1,80 @@
+<div class='student-head'>
+  <span class='avatar big'>{{ overview.student.user.first_name|default:overview.student.user.username|slice:':1'|upper }}</span>
+  <div>
+    <h3>{{ overview.student.user.get_full_name|default:overview.student.user.username }}</h3>
+    <span class='muted'>Student number {{ overview.student.student_number }}</span>
+  </div>
+</div>
+
+<div class='stats'>
+  <div class='stat g-rose' style='--i:0'>
+    <strong class='stat-number' data-count='{{ overview.absence_count }}'>{{ overview.absence_count }}</strong>
+    <span class='stat-label'>Absences</span>
+  </div>
+  <div class='stat g-amber' style='--i:1'>
+    <strong class='stat-number' data-count='{{ overview.late_count }}'>{{ overview.late_count }}</strong>
+    <span class='stat-label'>Late arrivals</span>
+  </div>
+</div>
+
+<section class='panel'>
+  <h4>Class{% if overview.school_class %} {{ overview.school_class.name }}{% endif %}</h4>
+  {% if overview.school_class %}
+  <table>
+    <tr><th>Subject</th><th>Teacher</th></tr>
+    {% for a in overview.teachers %}
+    <tr>
+      <td>{{ a.subject.name }}</td>
+      <td>{{ a.teacher.user.get_full_name|default:a.teacher.user.username }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan='2' class='muted'>No teachers are assigned to this class yet.</td></tr>
+    {% endfor %}
+
+  </table>
+  {% else %}
+  <p class='muted'>This student is not in a class for the current academic year yet.</p>
+  {% endif %}
+</section>
+
+{% for r in overview.reports %}
+<section class='panel'>
+  <div class='term-head'>
+    <h4>{{ r.term.name }}</h4>
+    <span class='avg-pill {% if r.overall is None %}na{% elif r.overall >= 10 %}ok{% else %}low{% endif %}'>
+      {% if r.overall is not None %}{{ r.overall|floatformat:2 }} / 20{% else %}No grades yet{% endif %}
+    </span>
+  </div>
+  <table>
+    <tr><th>Subject</th><th>Coefficient</th><th>Progress</th><th>Average / 20</th></tr>
+    {% for row in r.rows %}
+    <tr>
+      <td>{{ row.subject.name }}</td>
+      <td>{{ row.coefficient }}</td>
+      <td><div class='bar'><span class='{% if row.average >= 10 %}ok{% else %}low{% endif %}' style='width: {% widthratio row.average 20 100 %}%'></span></div></td>
+      <td><strong>{{ row.average|floatformat:2 }}</strong></td>
+    </tr>
+    {% empty %}
+    <tr><td colspan='4' class='muted'>No grades have been entered for this term yet.</td></tr>
+    {% endfor %}
+  </table>
+  {% if show_pdf %}<a class='btn btn-ghost' href='{% url 'report_card_pdf' r.term.pk %}'>Download report card (PDF)</a>{% endif %}
+</section>
+{% empty %}
+<div class='panel'><p class='muted'>No terms were found for the current academic year.</p></div>
+{% endfor %}
+
+
+<h3>Attendance</h3>
+<table>
+  <tr><th>Date</th><th>Status</th><th>Note</th></tr>
+  {% for a in overview.recent_attendance %}
+  <tr>
+    <td>{{ a.date }}</td>
+    <td><span class='badge {{ a.status }}'>{{ a.get_status_display }}</span></td>
+    <td>{{ a.note }}</td>
+  </tr>
+  {% empty %}
+  <tr><td colspan='3' class='muted'>No absences or late arrivals recorded.</td></tr>
+  {% endfor %}
+</table>

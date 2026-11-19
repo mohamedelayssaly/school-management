@@ -1,0 +1,22 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+<h2>{{ assignment.subject.name }} - {{ assignment.school_class.name }}</h2>
+<p><div class='form-actions'>
+  <a class='btn' href='{% url 'exam_create' assignment.pk %}'>New exam</a>
+  <a class='btn btn-ghost' href='{% url 'teacher_dashboard' %}'>Back to my classes</a>
+</div></p>
+<table>
+  <tr><th>Exam</th><th>Term</th><th>Date</th><th>Max</th><th></th></tr>
+  {% for e in exams %}
+  <tr>
+    <td>{{ e.title }}</td>
+    <td>{{ e.term.name }}</td>
+    <td>{{ e.date }}</td>
+    <td>{{ e.max_score }}</td>
+    <td><a class='btn btn-ghost' href='{% url 'grade_entry' e.pk %}'>Enter grades</a></td>
+  </tr>
+  {% empty %}
+  <tr><td colspan='5'>No exams yet.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+<h2>Class results</h2>
+<form method='get'>
+  <select name='class'>
+    {% for c in classes %}<option value='{{ c.pk }}'>{{ c }}</option>{% endfor %}
+  </select>
+  <select name='term'>
+    {% for t in terms %}<option value='{{ t.pk }}'>{{ t }}</option>{% endfor %}
+  </select>
+  <button type='submit'>Show</button>
+</form>
+{% if ranking %}
+<h3>{{ selected_class }} - {{ selected_term.name }}</h3>
+<table>
+  <tr><th>Rank</th><th>Student</th><th>Average / 20</th><th>Result</th></tr>
+  {% for r in ranking %}
+  <tr>
+    <td>{{ r.rank }}</td>
+    <td>{{ r.student }}</td>
+    <td>{% if r.average is not None %}{{ r.average|floatformat:2 }}{% else %}-{% endif %}</td>
+    <td>{% if r.average is None %}-{% elif r.average >= 10 %}Pass{% else %}Fail{% endif %}</td>
+  </tr>
+  {% endfor %}
+</table>
+<p><a class='btn btn-ghost' href='{% url 'export_class_results' %}?class={{ selected_class.pk }}&term={{ selected_term.pk }}'>Download as Excel</a></p>
+{% endif %}
+<p><a class='btn btn-ghost' href='{% url 'direction_dashboard' %}'>Back to dashboard</a></p>
+{% endblock %}

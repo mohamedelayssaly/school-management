@@ -1,0 +1,32 @@
+{% extends 'accounts/base.html' %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<h2>Settings</h2>
+
+<div class='panel school-summary'>
+  {% if school.logo %}
+  <img src='{{ school.logo.url }}' alt=''>
+  {% else %}
+  <span class='brand-mark big'><svg class='ico'><use href='#i-book'/></svg></span>
+  {% endif %}
+  <div>
+    <h3>{{ school.name }}</h3>
+    <p class='muted'>{% if school.slogan %}{{ school.slogan }}{% else %}Add a slogan in the school information page.{% endif %}</p>
+  </div>
+</div>
+
+<div class='actions'>
+  <a class='action' href='{% url 'school_profile' %}'>
+    <span class='ico-box'><svg class='ico'><use href='#i-book'/></svg></span>
+    <div><strong>School information</strong><span>Name, logo, address and contact details</span></div>
+  </a>
+  <a class='action' href='{% url 'user_list' %}'>
+    <span class='ico-box'><svg class='ico'><use href='#i-users'/></svg></span>
+    <div><strong>Users and passwords</strong><span>Edit users, change roles, disable accounts, reset passwords</span></div>
+  </a>
+  <a class='action' href='{% url 'my_account' %}'>
+    <span class='ico-box'><svg class='ico'><use href='#i-user'/></svg></span>
+    <div><strong>My account</strong><span>Your details and your password</span></div>
+  </a>
+</div>
+{% endblock %}
